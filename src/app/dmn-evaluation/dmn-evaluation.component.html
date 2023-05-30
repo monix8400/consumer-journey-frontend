@@ -1,0 +1,27 @@
+<h2>DMN Evaluation</h2>
+
+<div class="input-section">
+  <div class="input-row" *ngFor="let input of decisionInputs">
+    <label>{{ input.name }}</label>
+    <input [(ngModel)]="input.value" type="text">
+  </div>
+</div>
+
+<button (click)="evaluateDMN()">Evaluate DMN</button>
+
+<div *ngIf="isLoading">
+  Loading...
+</div>
+
+<div *ngIf="evaluationResult.length > 0">
+  <h3>Evaluation Result:</h3>
+  <ul>
+    <li>
+      {{ evaluationResult[0]['Produkt Typ'] }}
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  Error: {{ errorMessage }}
+</div>
