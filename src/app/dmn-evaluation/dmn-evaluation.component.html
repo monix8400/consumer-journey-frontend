@@ -1,27 +1,80 @@
-<h2>DMN Evaluation</h2>
+<mat-card>
+  <mat-card-content>
+    <h1>Choose your personalized product here:</h1>
+    <mat-horizontal-stepper>
+      <mat-step *ngFor="let table of decisionTables; index as t">
+        <ng-template matStepLabel >{{ table.title }}</ng-template>
 
-<div class="input-section">
-  <div class="input-row" *ngFor="let input of decisionInputs">
-    <label>{{ input.name }}</label>
-    <input [(ngModel)]="input.value" type="text">
-  </div>
-</div>
 
-<button (click)="evaluateDMN()">Evaluate DMN</button>
+        <div class="input-section" *ngIf="t === 2">
+          <div class="input-row" *ngFor="let input of table.inputs; index as i">
+            <mat-form-field appearance="outline" class="input-field">
+              <mat-label>{{ input.name }}</mat-label>
+                <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults[i]" readonly>
+            </mat-form-field>
+          </div>
+        </div>
 
-<div *ngIf="isLoading">
-  Loading...
-</div>
+        <div class="input-section" *ngIf="t === 3">
+          <div class="input-row" *ngFor="let input of table.inputs; index as k">
+            <mat-form-field appearance="outline" class="input-field" *ngIf="k==0">
+              <mat-label>{{ input.name }}</mat-label>
+                <mat-select [(ngModel)]="input.value">
+                  <mat-option *ngFor="let option of getInputOptions(input.name)"
+                              [value]="option">{{ option }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="input-field" *ngIf="k==1">
+              <mat-label>{{ input.name }}</mat-label>
+                  <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults[2]" readonly>
+            </mat-form-field>
+          </div>
+        </div>
 
-<div *ngIf="evaluationResult.length > 0">
-  <h3>Evaluation Result:</h3>
-  <ul>
-    <li>
-      {{ evaluationResult[0]['Produkt Typ'] }}
-    </li>
-  </ul>
-</div>
+        <div class="input-section" *ngIf="(t === 0)||(t == 1)">
+          <div class="input-row" *ngFor="let input of table.inputs">
+            <mat-form-field appearance="outline" class="input-field">
+              <mat-label>{{ input.name }}</mat-label>
+              <mat-select [(ngModel)]="input.value">
+                <mat-option *ngFor="let option of getInputOptions(input.name)"
+                            [value]="option">{{ option }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
 
-<div *ngIf="errorMessage" class="error-message">
-  Error: {{ errorMessage }}
-</div>
+
+        <div class="button-row">
+          <button mat-raised-button color="primary" (click)="evaluateDecisionTable(table)">Evaluate DMN</button>
+        </div>
+
+
+        <div *ngIf="evaluationResult.length > 0" class="result-section">
+          <h2>{{ evaluationResult[0].result }}</h2>
+        </div>
+        <div *ngIf="evaluationResult.length == 0" class="result-section" style="margin-bottom: 28px">
+          <br>
+        </div>
+
+
+        <div *ngIf="table.errorMessage" class="error-message">
+          {{ table.errorMessage }}
+        </div>
+
+
+        <div class="back-next-buttons" *ngIf="(t ===0)">
+          <div></div>
+          <button mat-button matStepperNext (click)="emptyResult()">Next</button>
+        </div>
+        <div class="back-next-buttons" *ngIf="(t === 1)||(t === 2)">
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext (click)="emptyResult()">Next</button>
+        </div>
+        <div class="back-next-buttons" *ngIf="(t === 3)">
+          <button mat-button matStepperPrevious>Back</button>
+        </div>
+
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,87 @@
+.input-section {
+  margin-bottom: 20px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-field {
+  flex-grow: 1;
+  margin-right: 10px;
+  width: 50em;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.result-section {
+  margin-top: 20px;
+}
+
+.result-item {
+  margin-bottom: 5px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 20px;
+}
+
+.back-next-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-horizontal-stepper {
+  width: 100%;
+  max-width: 600px;
+}
+
+.input-section,
+.button-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-field {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.result-section,
+.error-message {
+  width: 100%;
+  text-align: center;
+}
+
+.back-next-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
