@@ -1,0 +1,16 @@
+img#logo {
+  height: 64px;
+  border-radius: 50%;
+}
+
+mat-card.mat-card.mat-focus-indicator.card-with-image {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+img.mat-card-image {
+  width: 400px;
+}

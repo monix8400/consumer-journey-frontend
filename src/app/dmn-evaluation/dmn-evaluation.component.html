@@ -10,7 +10,7 @@
           <div class="input-row" *ngFor="let input of table.inputs; index as i">
             <mat-form-field appearance="outline" class="input-field">
               <mat-label>{{ input.name }}</mat-label>
-                <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults[i]" readonly>
+                <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults.get(decisionTables[i].title)" readonly>
             </mat-form-field>
           </div>
         </div>
@@ -26,7 +26,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline" class="input-field" *ngIf="k==1">
               <mat-label>{{ input.name }}</mat-label>
-                  <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults[2]" readonly>
+                  <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults.get(decisionTables[t-1].title)" readonly>
             </mat-form-field>
           </div>
         </div>
@@ -62,7 +62,7 @@
         </div>
 
 
-        <div class="back-next-buttons" *ngIf="(t ===0)">
+        <div class="back-next-buttons" *ngIf="t ===0">
           <div></div>
           <button mat-button matStepperNext (click)="emptyResult()">Next</button>
         </div>
@@ -70,8 +70,9 @@
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext (click)="emptyResult()">Next</button>
         </div>
-        <div class="back-next-buttons" *ngIf="(t === 3)">
+        <div class="back-next-buttons" *ngIf="t === 3">
           <button mat-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="accent" (click)="seeProdukt()">See Product</button>
         </div>
 
       </mat-step>

@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+
 
 interface EvaluationResult {
   title: string;
@@ -50,8 +52,9 @@ export class DmnEvaluationComponent {
       endpoint: 'http://localhost:8080/api/products/dmn/personalised_choice',
       inputs: [
         {name: 'ImmunityLevel', value: '', options: ["low", "medium", "high"]},
-        {name: 'ProductType', value: '', options: [
-          "HipoAllergenic-Floral Type",
+        {
+          name: 'ProductType', value: '', options: [
+            "HipoAllergenic-Floral Type",
             "HipoAllergenic-Leaves Type",
             "Oilfree-Leave Type",
             "Oilfree-Floral Type",
@@ -59,7 +62,8 @@ export class DmnEvaluationComponent {
             "HydroFloral Type",
             "MattifyingLeaves Type",
             "MattifyingFloral Type"
-          ]},
+          ]
+        },
       ],
       resultKey: 'Personalised Choice',
       isLoading: false,
@@ -70,8 +74,9 @@ export class DmnEvaluationComponent {
       title: 'Product Type',
       endpoint: 'http://localhost:8080/api/products/dmn/product',
       inputs: [
-        {name: 'BodyPart', value: '', options: ["Face", "Lips"]},
-        {name: 'PersonalisedChoice', value: '', options: [
+        {name: 'BodyPart', value: '', options: ["Face", "Lips", "Body"]},
+        {
+          name: 'PersonalisedChoice', value: '', options: [
             "HipoAllergenic-Floral Type Extra",
             "HipoAllergenic-Leaves Type Extra",
             "MattifyingLeaves Type Extra",
@@ -96,7 +101,8 @@ export class DmnEvaluationComponent {
             "HydroLeaves Type ImmunityBooster",
             "Oilfree-Floral Type ImmunityBooster",
             "Oilfree-Leave Type ImmunityBooster"
-          ]},
+          ]
+        },
       ], resultKey: 'Product', isLoading: false, evaluationResult: undefined, errorMessage: '',
     },
   ];
@@ -106,10 +112,10 @@ export class DmnEvaluationComponent {
     result: string;
   }[] = [];
 
-  previousResults: any[] = [];
+  previousResults: any = new Map<string, string>();
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   evaluateDecisionTable(table: any) {
@@ -121,12 +127,14 @@ export class DmnEvaluationComponent {
     }
 
     if (table.endpoint.indexOf("/personalised_choice") > -1) {
-      variables["ImmunityLevel"] = this.previousResults[0];
-      variables["ProductType"] = this.previousResults[1];
+      console.log(this.previousResults.get('Immunity Level'))
+      console.log(this.previousResults.get('Individual Preference'))
+      variables["ImmunityLevel"] = this.previousResults.get('Immunity Level');
+      variables["ProductType"] = this.previousResults.get('Individual Preference');
     }
 
     if (table.endpoint.indexOf("/product") > -1) {
-      variables["PersonalisedChoice"] = this.previousResults[2];
+      variables["PersonalisedChoice"] = this.previousResults.get('Personalised Choice');
     }
 
     console.log("variables: " + JSON.stringify(variables))
@@ -134,39 +142,47 @@ export class DmnEvaluationComponent {
     const values = Object.values(variables);
     const hasEmptyValues = values.some((value: any) => !value);
 
-    if (hasEmptyValues) {
+    // if (hasEmptyValues) {
+    //
+    //   table.errorMessage = 'You should select something before submitting your preference.';
+    //
+    // } else {
 
-      table.errorMessage = 'You should select something before submitting your preference.';
+    this.http.post<any>(table.endpoint, variables).subscribe(
+      (result: EvaluationResult[]) => {
+        console.log(result);
+        // @ts-ignore
+        console.log("whole result: " + result[0]);
+        // @ts-ignore
+        console.log("result: " + result[0][table.resultKey]);
 
-    } else {
-
-      this.http.post<any>(table.endpoint, variables).subscribe(
-        (result: EvaluationResult[]) => {
-          console.log(result);
-          // @ts-ignore
-          console.log(result[0]);
-
-          table.evaluationResult = result.find(res => res.title === table.resultKey);
-          if (this.evaluationResult.length === 0) {
-            this.evaluationResult.push({title: '', result: ''});
-          }
-          this.evaluationResult[0].title = table.resultKey
-          // @ts-ignore
-          this.evaluationResult[0].result = result[0][table.resultKey]
-          table.isLoading = false;
-          table.evaluationResult = result[0];
-          table.errorMessage = '';
-
-          // @ts-ignore
-          this.previousResults.push(result[0][table.resultKey]);
-        },
-        (error) => {
-          table.isLoading = false;
-          table.evaluationResult = undefined;
-          table.errorMessage = 'An error occurred while evaluating the DMN file.';
+        table.evaluationResult = result.find(res => res.title === table.resultKey);
+        if (this.evaluationResult.length === 0) {
+          this.evaluationResult.push({title: '', result: ''});
         }
-      );
-    }
+        this.evaluationResult[0].title = table.resultKey
+        // @ts-ignore
+        this.evaluationResult[0].result = result[0][table.resultKey]
+        table.isLoading = false;
+        table.evaluationResult = result[0];
+        table.errorMessage = '';
+
+        // @ts-ignore
+        // this.previousResults.push(result[0][table.resultKey]);
+        // @ts-ignore
+        this.previousResults.set(table.resultKey, result[0][table.resultKey])
+        console.log(JSON.stringify(this.previousResults.entries()));
+        for (let entry of this.previousResults.entries()) {
+          console.log(entry[0], entry[1]);
+        }
+      },
+      (error) => {
+        table.isLoading = false;
+        table.evaluationResult = undefined;
+        table.errorMessage = 'An error occurred while evaluating the DMN file.';
+      }
+    );
+    // }
   }
 
   getInputOptions(inputName: string): string[] {
@@ -182,5 +198,11 @@ export class DmnEvaluationComponent {
 
   emptyResult() {
     this.evaluationResult = [];
+  }
+
+  seeProdukt() {
+    console.log(this.previousResults.get('Product'))
+    this.router.navigate(['/product-description', this.previousResults.get('Product')])
+      .then(r => console.log(r))
   }
 }
