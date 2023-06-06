@@ -25,7 +25,7 @@ export class DmnEvaluationComponent {
   }[] = [
     {
       title: 'Immunity Level',
-      endpoint: 'http://localhost:8080/api/products/dmn/immunity_lvl',
+      endpoint: 'http://localhost:8080/dmn/immunity_lvl',
       inputs: [
         {name: 'Age', value: '', options: ["Toddler", "Child", "Teenager", "Adult", "Senior"]},
         {name: 'Season', value: '', options: ["Spring", "Summer", "Autumn", "Winter"]},
@@ -37,7 +37,7 @@ export class DmnEvaluationComponent {
     },
     {
       title: 'Individual Preference',
-      endpoint: 'http://localhost:8080/api/products/dmn/individual_preference',
+      endpoint: 'http://localhost:8080/dmn/individual_preference',
       inputs: [
         {name: 'HoneyType', value: '', options: ["BlutenHonig", "Akazienhonig"]},
         {name: 'SkinType', value: '', options: ["allergenic", "oily", "dry", "normal"]},
@@ -49,7 +49,7 @@ export class DmnEvaluationComponent {
     },
     {
       title: 'Personalised Choice',
-      endpoint: 'http://localhost:8080/api/products/dmn/personalised_choice',
+      endpoint: 'http://localhost:8080/dmn/personalised_choice',
       inputs: [
         {name: 'ImmunityLevel', value: '', options: ["low", "medium", "high"]},
         {
@@ -72,7 +72,7 @@ export class DmnEvaluationComponent {
     },
     {
       title: 'Product Type',
-      endpoint: 'http://localhost:8080/api/products/dmn/product',
+      endpoint: 'http://localhost:8080/dmn/product',
       inputs: [
         {name: 'BodyPart', value: '', options: ["Face", "Lips", "Body"]},
         {

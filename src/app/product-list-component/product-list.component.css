@@ -1,4 +1,19 @@
-img#logo {
-  height: 64px;
+.avatar {
+  width: 100px; /* Adjust the width to fit your needs */
+  height: 100px; /* Adjust the height to fit your needs */
+  object-fit: cover;
   border-radius: 50%;
+  padding: 0 30px 0 0;
+}
+.title {
+  font-size: 24px; /* Adjust the font size to fit your needs */
+  color: #673ab7;
+}
+.mat-expansion-panel-header:not([aria-disabled=true]) {
+  cursor: pointer;
+  display: flex;
+  height: 100px;
+}
+.description{
+  font-size: 18px;
 }

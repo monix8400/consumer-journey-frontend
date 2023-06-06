@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {last} from "rxjs";
 
 interface Product {
   name: string;
   description: string;
+  imageUrl: string
 }
 
 @Component({
@@ -12,14 +15,25 @@ interface Product {
 })
 export class ProductListComponent implements OnInit {
 
-  products: Product[] = [
-    { name: 'Product 1', description: 'Description of Product 1' },
-    { name: 'Product 2', description: 'Description of Product 2' },
-    { name: 'Product 3', description: 'Description of Product 3' }
-  ];
-  constructor() { }
+  products: Product[] = [];
+
+  constructor(private http: HttpClient) {
+  }
 
   ngOnInit(): void {
+    this.fetchHoneyList();
+  }
+
+  fetchHoneyList(): void {
+    this.http.get<Product[]>('http://localhost:8080/productList').subscribe(
+      (response: Product[]) => {
+        this.products = response;
+        console.log(this.products)
+      },
+      (error: any) => {
+        console.error('Failed to fetch honey list:', error);
+      }
+    );
   }
 
 }

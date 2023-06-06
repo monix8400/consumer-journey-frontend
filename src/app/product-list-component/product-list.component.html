@@ -1,13 +1,16 @@
-<mat-toolbar color="accent">
-  <mat-toolbar-row>
-    <img id="logo" src="/assets/High_Quality_Produkt.ico" alt="logo"/>
-  </mat-toolbar-row>
-</mat-toolbar>
-<p>product-list-component works!</p>
 <mat-list>
-  <mat-list-item *ngFor="let product of products">
-    <mat-icon mat-list-icon>shopping_cart</mat-icon>
-    <h3 mat-line>{{ product.name }}</h3>
-    <p mat-line>{{ product.description }}</p>
-  </mat-list-item>
+  <ng-container *ngFor="let product of products; let last = last; index as i">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img mat-list-avatar src="{{product.imageUrl}}" alt="{{ product.name }}" class="avatar">
+          <h3 matLine class="title">{{ product.name }}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <!-- Additional content inside the expansion panel if needed -->
+      <p class="description">{{ product.description }}</p>
+    </mat-expansion-panel>
+
+    <mat-divider *ngIf="!last"></mat-divider>
+  </ng-container>
 </mat-list>
