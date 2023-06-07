@@ -3,14 +3,15 @@
     <h1>Choose your personalized product here:</h1>
     <mat-horizontal-stepper>
       <mat-step *ngFor="let table of decisionTables; index as t">
-        <ng-template matStepLabel >{{ table.title }}</ng-template>
+        <ng-template matStepLabel>{{ table.title }}</ng-template>
 
 
         <div class="input-section" *ngIf="t === 2">
           <div class="input-row" *ngFor="let input of table.inputs; index as i">
             <mat-form-field appearance="outline" class="input-field">
               <mat-label>{{ input.name }}</mat-label>
-                <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults.get(decisionTables[i].title)" readonly>
+              <input matInput [(ngModel)]="input.value" type="text"
+                     [value]="previousResults.get(decisionTables[i].title)" readonly>
             </mat-form-field>
           </div>
         </div>
@@ -19,14 +20,15 @@
           <div class="input-row" *ngFor="let input of table.inputs; index as k">
             <mat-form-field appearance="outline" class="input-field" *ngIf="k==0">
               <mat-label>{{ input.name }}</mat-label>
-                <mat-select [(ngModel)]="input.value">
-                  <mat-option *ngFor="let option of getInputOptions(input.name)"
-                              [value]="option">{{ option }}</mat-option>
-                </mat-select>
+              <mat-select [(ngModel)]="input.value">
+                <mat-option *ngFor="let option of getInputOptions(input.name)"
+                            [value]="option">{{ option }}</mat-option>
+              </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" class="input-field" *ngIf="k==1">
               <mat-label>{{ input.name }}</mat-label>
-                  <input matInput [(ngModel)]="input.value" type="text" [value]="previousResults.get(decisionTables[t-1].title)" readonly>
+              <input matInput [(ngModel)]="input.value" type="text"
+                     [value]="previousResults.get(decisionTables[t-1].title)" readonly>
             </mat-form-field>
           </div>
         </div>

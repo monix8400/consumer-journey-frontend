@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 
-
 interface EvaluationResult {
   title: string;
   result: string;
@@ -127,8 +126,6 @@ export class DmnEvaluationComponent {
     }
 
     if (table.endpoint.indexOf("/personalised_choice") > -1) {
-      console.log(this.previousResults.get('Immunity Level'))
-      console.log(this.previousResults.get('Individual Preference'))
       variables["ImmunityLevel"] = this.previousResults.get('Immunity Level');
       variables["ProductType"] = this.previousResults.get('Individual Preference');
     }
@@ -137,25 +134,8 @@ export class DmnEvaluationComponent {
       variables["PersonalisedChoice"] = this.previousResults.get('Personalised Choice');
     }
 
-    console.log("variables: " + JSON.stringify(variables))
-
-    const values = Object.values(variables);
-    const hasEmptyValues = values.some((value: any) => !value);
-
-    // if (hasEmptyValues) {
-    //
-    //   table.errorMessage = 'You should select something before submitting your preference.';
-    //
-    // } else {
-
     this.http.post<any>(table.endpoint, variables).subscribe(
       (result: EvaluationResult[]) => {
-        console.log(result);
-        // @ts-ignore
-        console.log("whole result: " + result[0]);
-        // @ts-ignore
-        console.log("result: " + result[0][table.resultKey]);
-
         table.evaluationResult = result.find(res => res.title === table.resultKey);
         if (this.evaluationResult.length === 0) {
           this.evaluationResult.push({title: '', result: ''});
@@ -168,13 +148,7 @@ export class DmnEvaluationComponent {
         table.errorMessage = '';
 
         // @ts-ignore
-        // this.previousResults.push(result[0][table.resultKey]);
-        // @ts-ignore
         this.previousResults.set(table.resultKey, result[0][table.resultKey])
-        console.log(JSON.stringify(this.previousResults.entries()));
-        for (let entry of this.previousResults.entries()) {
-          console.log(entry[0], entry[1]);
-        }
       },
       (error) => {
         table.isLoading = false;
@@ -182,7 +156,6 @@ export class DmnEvaluationComponent {
         table.errorMessage = 'An error occurred while evaluating the DMN file.';
       }
     );
-    // }
   }
 
   getInputOptions(inputName: string): string[] {
@@ -205,4 +178,5 @@ export class DmnEvaluationComponent {
     this.router.navigate(['/product-description', this.previousResults.get('Product')])
       .then(r => console.log(r))
   }
+
 }

@@ -2,8 +2,8 @@
   <mat-card-header>
     <mat-card-title>{{productTitle}}</mat-card-title>
   </mat-card-header>
-  <img mat-card-image src="/assets/High_Quality_Produkt.ico" alt="Product Image"/>
+  <img mat-card-image src="{{product?.imageUrl}}" alt="{{product?.name}}"/>
   <mat-card-content>
-    <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <p>{{product?.description}}</p>
   </mat-card-content>
 </mat-card>

@@ -1,5 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+
+interface HoneyProduct {
+  name: string;
+  description: string;
+  imageUrl: string;
+}
 
 @Component({
   selector: 'app-product-description',
@@ -9,12 +16,22 @@ import {ActivatedRoute} from "@angular/router";
 export class ProductDescriptionComponent implements OnInit {
 
   productTitle: string | undefined;
-  constructor(private route: ActivatedRoute) { }
+  product: HoneyProduct | undefined;
+
+  constructor(private route: ActivatedRoute, private http: HttpClient) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.productTitle = params['productName'];
-      // Do something with the productId, such as fetching data or setting component properties
+      this.getProductByName(this.productTitle);
+    });
+  }
+
+  getProductByName(productName: string | undefined) {
+    const url = `http://localhost:8080/personalisedProduct?productName=${productName}`;
+    this.http.get<HoneyProduct>(url).subscribe((product) => {
+      this.product = product;
     });
   }
 
